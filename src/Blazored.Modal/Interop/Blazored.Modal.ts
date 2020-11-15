@@ -6,7 +6,6 @@ interface FocusTrapInstance {
 }
 
 export class BlazoredModal {
-    
     readonly _options: Options = { escapeDeactivates: false, allowOutsideClick: () => true };
     private _traps: Array<FocusTrapInstance> = [];
 
@@ -31,13 +30,15 @@ export class BlazoredModal {
         }
     }
 
-    public deactivateFocusTrap(id: string): void {
+    public deactivateFocusTrap(id: string, disableBodyReposition: boolean): void {
         const trap = this._traps.find(i => i.id === id);
         const scrollY = document.body.style.top;
         document.body.style.position = '';
         document.body.style.top = '';
         document.body.style.width = '';
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+
+        if (disableBodyReposition != true)
+            window.scrollTo(0, parseInt(scrollY || '0') * -1);
 
         if (trap) {
             trap.focusTrap.deactivate();

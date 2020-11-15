@@ -1,4 +1,5 @@
 ﻿using Blazored.Modal.Services;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Blazored.Modal

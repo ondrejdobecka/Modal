@@ -1,7 +1,9 @@
 ﻿using Blazored.Modal.Services;
+
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
+
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -19,6 +21,7 @@ namespace Blazored.Modal
         [Parameter] public bool? HideHeader { get; set; }
         [Parameter] public bool? HideCloseButton { get; set; }
         [Parameter] public bool? DisableBackgroundCancel { get; set; }
+        [Parameter] public bool? DisableBodyReposition { get; set; }
         [Parameter] public ModalPosition? Position { get; set; }
         [Parameter] public string Class { get; set; }
         [Parameter] public ModalAnimation Animation { get; set; }
@@ -40,6 +43,7 @@ namespace Blazored.Modal
 
             GlobalModalOptions.Class = Class;
             GlobalModalOptions.DisableBackgroundCancel = DisableBackgroundCancel;
+            GlobalModalOptions.DisableBodyReposition = DisableBodyReposition;
             GlobalModalOptions.HideCloseButton = HideCloseButton;
             GlobalModalOptions.HideHeader = HideHeader;
             GlobalModalOptions.Position = Position;
@@ -83,7 +87,7 @@ namespace Blazored.Modal
         {
             if (modal != null)
             {
-                await JSRuntime.InvokeVoidAsync("BlazoredModal.deactivateFocusTrap", modal.Id);
+                await JSRuntime.InvokeVoidAsync("BlazoredModal.deactivateFocusTrap", modal.Id, modal.ModalInstanceRef.Options.DisableBodyReposition);
                 modal.Dismiss(result);
                 Modals.Remove(modal);
                 await InvokeAsync(StateHasChanged);
@@ -94,7 +98,7 @@ namespace Blazored.Modal
         {
             foreach (var modalReference in Modals.ToList())
             {
-                await JSRuntime.InvokeVoidAsync("BlazoredModal.deactivateFocusTrap", modalReference.Id);
+                await JSRuntime.InvokeVoidAsync("BlazoredModal.deactivateFocusTrap", modalReference.Id, modalReference.ModalInstanceRef.Options.DisableBodyReposition);
                 modalReference.Dismiss(ModalResult.Cancel());
             }
 

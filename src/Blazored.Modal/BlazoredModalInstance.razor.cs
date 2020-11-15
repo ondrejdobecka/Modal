@@ -24,9 +24,12 @@ namespace Blazored.Modal
         private bool HideHeader { get; set; }
         private bool HideCloseButton { get; set; }
         private bool DisableBackgroundCancel { get; set; }
+        private bool DisableBodyReposition { get; set; }
 
-		private string AnimationDuration {
-            get {
+        private string AnimationDuration
+        {
+            get
+            {
                 var duration = (Options?.Animation?.Duration ?? GlobalModalOptions?.Animation?.Duration ?? 0) * 1000;
                 return FormattableString.Invariant($"{duration}ms");
             }
@@ -103,6 +106,7 @@ namespace Blazored.Modal
             HideHeader = SetHideHeader();
             HideCloseButton = SetHideCloseButton();
             DisableBackgroundCancel = SetDisableBackgroundCancel();
+            DisableBodyReposition = SetDisableBodyReposition();
             UseCustomLayout = SetUseCustomLayout();
         }
 
@@ -143,18 +147,24 @@ namespace Blazored.Modal
             {
                 case ModalPosition.Center:
                     return "blazored-modal-center";
+
                 case ModalPosition.TopLeft:
                     return "blazored-modal-topleft";
+
                 case ModalPosition.TopRight:
                     return "blazored-modal-topright";
+
                 case ModalPosition.BottomLeft:
                     return "blazored-modal-bottomleft";
+
                 case ModalPosition.BottomRight:
                     return "blazored-modal-bottomright";
+
                 case ModalPosition.Custom:
                     if (string.IsNullOrWhiteSpace(Options.PositionCustomClass))
                         throw new InvalidOperationException("Position set to Custom without a PositionCustomClass set.");
                     return Options.PositionCustomClass;
+
                 default:
                     return "blazored-modal-center";
             }
@@ -237,6 +247,17 @@ namespace Blazored.Modal
 
             if (GlobalModalOptions.DisableBackgroundCancel.HasValue)
                 return GlobalModalOptions.DisableBackgroundCancel.Value;
+
+            return false;
+        }
+
+        private bool SetDisableBodyReposition()
+        {
+            if (Options.DisableBodyReposition.HasValue)
+                return Options.DisableBodyReposition.Value;
+
+            if (GlobalModalOptions.DisableBodyReposition.HasValue)
+                return GlobalModalOptions.DisableBodyReposition.Value;
 
             return false;
         }
